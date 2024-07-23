@@ -20,19 +20,14 @@
 <body>
     <h1>Connect MetaMask Wallet</h1>
     <button id="connectButton">Connect Wallet</button>
-    <a id="deepLink" href="https://metamask.io/download/" style="display:none;">Open MetaMask</a>
-
-    <!-- MetaMask SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@metamask/sdk@latest/dist/metamask-sdk.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const connectButton = document.getElementById('connectButton');
-            const deepLink = document.getElementById('deepLink');
 
             connectButton.addEventListener('click', async () => {
+                // Check for MetaMask
                 if (window.ethereum) {
-                    // MetaMask is detected
                     try {
                         // Request account access
                         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -43,9 +38,16 @@
                         alert('Please allow access to your MetaMask wallet.');
                     }
                 } else {
-                    // MetaMask is not detected, guide user to install MetaMask
-                    alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
-                    window.open('https://metamask.io/download/', '_blank');
+                    // MetaMask is not detected
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        // User is on a mobile device
+                        alert('MetaMask is not installed. Please install MetaMask on your mobile device.');
+                        window.location.href = 'metamask://'; // Try opening MetaMask directly
+                    } else {
+                        // User is on a desktop device
+                        alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
+                        window.open('https://metamask.io/download/', '_blank');
+                    }
                 }
             });
         });
