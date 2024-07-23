@@ -22,7 +22,7 @@
     <button id="connectButton">Connect Wallet</button>
     <a id="deepLink" href="metamask://dapp/your-dapp-url" style="display:none;">Open MetaMask</a>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.3.5/dist/web3.min.js"></script>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', () => {
             const connectButton = document.getElementById('connectButton');
             const deepLink = document.getElementById('deepLink');
@@ -51,6 +51,25 @@
                 }
             });
         });
-    </script>
+    </script> -->
+
+    <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
+  <script>
+    const MMSDK = new MetaMaskSDK.MetaMaskSDK({
+      dappMetadata: {
+        name: "Example Pure JS Dapp",
+        url: window.location.href,
+      },
+      infuraAPIKey: 'https://sepolia.infura.io/v3/07899f7e527a4eec873d8691a62b834c',
+      // Other options.
+    });
+    // Because the init process of MetaMask SDK is async.
+    setTimeout(() => {
+      // You can also access via window.ethereum.
+      const ethereum = MMSDK.getProvider();
+
+      ethereum.request({ method: 'eth_requestAccounts' });
+    }, 0);
+  </script>
 </body>
 </html>
