@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Integration</title>
+</head>
+<body>
+    <h1>Connect MetaMask Wallet</h1>
+    <button id="connectButton">Connect Wallet</button>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.5/dist/web3.min.js"></script>
+    <script>
+        const connectButton = document.getElementById('connectButton');
+
+        connectButton.addEventListener('click', async () => {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const web3 = new Web3(window.ethereum);
+                    const accounts = await web3.eth.getAccounts();
+                    alert('Connected: ' + accounts[0]);
+                } catch (error) {
+                    console.error('User denied account access');
+                }
+            } else {
+                alert('MetaMask is not installed');
+            }
+        });
+    </script>
+</body>
+</html>
