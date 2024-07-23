@@ -26,7 +26,6 @@
             const connectButton = document.getElementById('connectButton');
 
             connectButton.addEventListener('click', async () => {
-                // Check for MetaMask
                 if (window.ethereum) {
                     try {
                         // Request account access
@@ -34,15 +33,30 @@
                         alert('Connected: ' + accounts[0]);
                         console.log('Connected account:', accounts[0]);
                     } catch (error) {
-                        console.error('User denied account access:', error);
-                        alert('Please allow access to your MetaMask wallet.');
+                        if (error.code === 4001) {
+                            // User rejected the request
+                            alert('Connection request rejected by the user.');
+                        } else if (error.code === -32002) {
+                            // Request already pending
+                            alert('A connection request is already pending. Please check your MetaMask.');
+                        } else {
+                            // Other errors
+                            console.error('Error connecting MetaMask:', error);
+                            alert('An error occurred while trying to connect MetaMask.');
+                        }
                     }
                 } else {
                     // MetaMask is not detected
                     if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                        // User is on a mobile device
+                        // User is on an iOS device
+                        alert('MetaMask is not installed. Please install MetaMask from the App Store.');
+                        setTimeout(() => {
+                            window.location.href = 'https://apps.apple.com/us/app/metamask/id1438144202'; // MetaMask App Store link
+                        }, 500); // Delay to allow for possible deep link handling
+                    } else if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        // User is on an Android device
                         alert('MetaMask is not installed. Please install MetaMask on your mobile device.');
-                        window.location.href = 'MetaMask://'; // Try opening MetaMask directly
+                        window.location.href = 'metamask://'; // Try opening MetaMask directly
                     } else {
                         // User is on a desktop device
                         alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
