@@ -39,7 +39,7 @@
                     }
                 } else {
                     // MetaMask is not detected
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                         // User is on a mobile device
                         alert('MetaMask is not installed. Please install MetaMask on your mobile device.');
                         window.location.href = 'MetaMask://'; // Try opening MetaMask directly
