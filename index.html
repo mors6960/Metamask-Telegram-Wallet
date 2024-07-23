@@ -32,6 +32,7 @@
 
             connectButton.addEventListener('click', async () => {
                 if (window.ethereum) {
+                    // MetaMask is detected
                     try {
                         // Request account access
                         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -42,8 +43,9 @@
                         alert('Please allow access to your MetaMask wallet.');
                     }
                 } else {
-                    // If MetaMask is not detected, try to open the MetaMask mobile app
-                    deepLink.click();
+                    // MetaMask is not detected, guide user to install MetaMask
+                    alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
+                    window.open('https://metamask.io/download/', '_blank');
                 }
             });
         });
