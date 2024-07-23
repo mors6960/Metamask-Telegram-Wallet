@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MetaMask SDK Integration</title>
+    <title>MetaMask Integration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,6 +20,7 @@
 <body>
     <h1>Connect MetaMask Wallet</h1>
     <button id="connectButton">Connect Wallet</button>
+    <a id="deepLink" href="metamask://dapp/your-dapp-url" style="display:none;">Open MetaMask</a>
 
     <!-- MetaMask SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@metamask/sdk@latest/dist/metamask-sdk.min.js"></script>
@@ -27,29 +28,22 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const connectButton = document.getElementById('connectButton');
-
-            // MetaMask SDK setup
-            const MMSDK = new MetaMaskSDK.MetaMaskSDK({
-                dappMetadata: {
-                    name: "MetaMask Dapp",
-                    url: window.location.href,
-                },
-                infuraAPIKey: 'https://mainnet.infura.io/v3/07899f7e527a4eec873d8691a62b834c', 
-            });
+            const deepLink = document.getElementById('deepLink');
 
             connectButton.addEventListener('click', async () => {
-                const ethereum = MMSDK.getProvider();
-                if (ethereum) {
+                if (window.ethereum) {
                     try {
-                        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                        // Request account access
+                        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                         alert('Connected: ' + accounts[0]);
                         console.log('Connected account:', accounts[0]);
                     } catch (error) {
-                        console.error('Error connecting MetaMask:', error);
-                        alert('An error occurred while trying to connect MetaMask.');
+                        console.error('User denied account access:', error);
+                        alert('Please allow access to your MetaMask wallet.');
                     }
                 } else {
-                    alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
+                    // If MetaMask is not detected, try to open the MetaMask mobile app
+                    deepLink.click();
                 }
             });
         });
