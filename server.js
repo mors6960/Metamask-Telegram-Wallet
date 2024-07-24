@@ -8,7 +8,6 @@ const TELEGRAM_TOKEN = '6549070771:AAGmJMkRK7zCfejSv5hhfMyy7LzhZduOdsA';
 const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`; 
 
 app.use(bodyParser.json());
-
 app.post('/webhook', async (req, res) => {
     const { message } = req.body;
     if (message && message.text) {
@@ -21,7 +20,6 @@ app.post('/webhook', async (req, res) => {
     }
     res.sendStatus(200);
 });
-
 const sendMessage = async (chatId, text) => {
     try {
         await axios.post(`${TELEGRAM_API}/sendMessage`, {
@@ -33,12 +31,6 @@ const sendMessage = async (chatId, text) => {
         console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
 };
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    setWebhook();
-});
-
 const setWebhook = async () => {
     const url = 'https://mors6960.github.io/Metamask-Telegram-Wallet/'; 
     try {
@@ -48,3 +40,7 @@ const setWebhook = async () => {
         console.error('Error setting webhook:', error.response ? error.response.data : error.message);
     }
 };
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    setWebhook();
+});
